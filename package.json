@@ -1,16 +1,42 @@
 {
-  "name": "tedious-wrapper",
-  "version": "1.0.0",
-  "description": "A simple wrapper for tedious (TDS driver)",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "_from": "github:intranetfactory/tedious-wrapper",
+  "_id": "tedious-wrapper@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha1-3Xd9q+n5tIrkTSieLs+wzwPwzVE=",
+  "_location": "/tedious-wrapper",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "intranetfactory/tedious-wrapper",
+    "rawSpec": "intranetfactory/tedious-wrapper",
+    "saveSpec": "github:intranetfactory/tedious-wrapper",
+    "fetchSpec": null,
+    "gitCommittish": "master"
   },
-  "keywords": [],
-  "author": "Miles Hingston <miles@bitshift.cc>",
-  "license": "MIT",
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:intranetfactory/tedious-wrapper#a87aa1af3139ed92f52ebd7f9b170e7fe68b14db",
+  "_spec": "intranetfactory/tedious-wrapper",
+  "_where": "C:\\Dev\\orcharddev\\src\\Orchard.Web\\lib\\node",
+  "author": {
+    "name": "Miles Hingston",
+    "email": "miles@bitshift.cc"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "tedious": "^2.2.4",
     "tedious-connection-pool": "github:mhingston/tedious-connection-pool"
-  }
+  },
+  "deprecated": false,
+  "description": "A simple wrapper for tedious (TDS driver)",
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "tedious-wrapper",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }

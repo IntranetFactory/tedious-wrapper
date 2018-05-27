@@ -1,10 +1,10 @@
 # tedious-wrapper
 
-A simple wrapper for [tedious](http://github.com/tediousjs/tedious) (TDS driver) with a built-in [connection pool](https://github.com/mhingston/tedious-connection-pool).
+A simple async/await wrapper for [tedious](http://github.com/tediousjs/tedious) (TDS driver) with a built-in [connection pool](https://github.com/mhingston/tedious-connection-pool).
 
 ## Installation
 
-    npm install mhingston/tedious-wrapper
+    npm install IntranetFactory/tedious-wrapper
     
 ## Description
 The API thinly wraps the `bulkLoad`, `execSql` and `callProcedure` methods of the tedious [Connection](http://tediousjs.github.io/tedious/api-connection.html) object.
@@ -49,6 +49,7 @@ const db = new TediousWrapper(config, logger);
 `const db = new TediousWrapper(config, logger);`
 
 * `config` {Object} the configuration object. The `connection` property uses the same configuration options as the tedious' [Connection](http://tediousjs.github.io/tedious/api-connection.html#function_newConnection) object. The `pool` property uses the same configuration options as [tedious-connection-pool](https://github.com/mhingston/tedious-connection-pool#new-connectionpoolpoolconfig-connectionconfig)'s `poolConfig`.
+* `config` {String} accepts a .NET style connection string and converts it to the same configuration options as the tedious' [Connection](http://tediousjs.github.io/tedious/api-connection.html#function_newConnection) object.
 * `logger` {Boolean|Function} Set to true to have debug log written to the console or pass a function to receive the log messages. Default = `false`.
 
 ### Property: `types`

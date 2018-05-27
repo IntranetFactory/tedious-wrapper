@@ -1,15 +1,36 @@
 const tedious = require('tedious');
 const ConnectionPool = require('tedious-connection-pool');
+
+const ConnectionString = require('./lib/connectionstring');
 let logger = {};
 
 class TediousWrapper
 {
     constructor(config, _logger)
     {
+        if (typeof config === 'string') {            
+            var connectionString = config;
+            config = {
+                connection: {},
+                pool:
+                {
+                    min: 1,
+                    max: 10,
+                    idleTimeout: 10000,
+                    acquireTimeout: 12000
+                }
+            }
+            config.connection = ConnectionString.resolve(connectionString);
+        }     
+
+
+
         config.connection.options.useColumnNames = true;
         config.connection.options.rowCollectionOnDone = false;
         config.connection.options.rowCollectionOnRequestCompletion = false;
         this.config = config;
+
+      
 
         if(_logger && typeof _logger.log === 'function')
         {
@@ -134,6 +155,7 @@ class TediousWrapper
             let metaDataCount = 0;
             let transform;
             let resultSet;
+            let result = { resultSets: []};
 
             const request = new tedious.Request(sql, (error, rowCount) =>
             {
@@ -146,9 +168,16 @@ class TediousWrapper
                     return reject(error);
                 }
 
-                callback(null, resultSets);
-                return resolve(resultSets);
+                // convenience property for results with single set
+                if(result.resultSets.length==1) {
+                    result.recordset = result.resultSets[0].rows;
+                    result.rowsAffected = result.resultSets[0].rowsAffected;
+                }
+
+                callback(null, result);
+                return resolve(result);
             });
+
 
             request.on('columnMetadata', (columns) =>
             {
@@ -179,7 +208,10 @@ class TediousWrapper
                 });
 
                 metaDataCount++;
-                resultSet = [];
+                resultSet = { 
+                    columns: columns,
+                    rows: []
+                };
             });
         
             request.on('row', (row) =>
@@ -191,16 +223,20 @@ class TediousWrapper
                     processedRow[column] = transform[column] ? transform[column](row[column].value, row[column].metadata) : row[column].value;
                 });
 
-                resultSet.push(processedRow);
+                resultSet.rows.push(processedRow);
             });
         
-            request.on('done', (rowCount, more, rows) => resultSets.push(resultSet));
+            request.on('done', (rowCount, more, rows) => {
+                resultSet.rowsAffected = rowCount;
+                result.resultSets.push(resultSet);
+            });
         
             request.on('doneInProc', (rowCount, more, rows) =>
             {
-                if(resultSets.length === metaDataCount-1)
+                if(result.resultSets.length === metaDataCount-1)
                 {
-                    resultSets.push(resultSet);
+                    resultSet.rowsAffected = rowCount;
+                    result.resultSets.push(resultSet);
                 }
             });
 
